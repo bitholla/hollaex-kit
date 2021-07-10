@@ -42,7 +42,7 @@
 		"morgan": "1.9.0",
 		"multer": "1.4.2",
 		"node-cron": "2.0.3",
-		"nodemailer": "6.4.6",
+		"nodemailer": "6.4.16",
 		"npm": "5.7.1",
 		"npm-programmatic": "0.0.12",
 		"otp": "0.1.3",
