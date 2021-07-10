@@ -34,7 +34,7 @@
 		"lodash.debounce": "4.0.8",
 		"lodash.isequal": "4.5.0",
 		"lodash.merge": "4.6.2",
-		"mathjs": "5.10.3",
+		"mathjs": "7.5.1",
 		"mobile-detect": "1.4.2",
 		"moment": "2.24.0",
 		"moment-jalaali": "0.7.2",
