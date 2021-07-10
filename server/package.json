@@ -51,7 +51,7 @@
 		"pm2": "2.10.1",
 		"pmx": "1.6.4",
 		"random-string": "0.2.0",
-		"redis": "2.8.0",
+		"redis": "3.1.1",
 		"redux": "4.0.1",
 		"request": "2.83.0",
 		"request-promise": "4.2.2",
