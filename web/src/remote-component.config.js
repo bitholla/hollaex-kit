@@ -1,16 +1,22 @@
 /**
  * Dependencies for Remote Components
  */
+
 module.exports = {
 	resolve: {
-		react: require('react'),
+		axios: require('axios'),
 		classnames: require('classnames'),
+		mathjs: require('mathjs'),
+		numbro: require('numbro'),
 		'prop-types': require('prop-types'),
-		'react-svg': require('react-svg'),
+		react: require('react'),
 		'react-device-detect': require('react-device-detect'),
 		'react-redux': require('react-redux'),
-		'redux-form': require('redux-form'),
+		'react-svg': require('react-svg'),
 		redux: require('redux'),
-		axios: require('axios'),
+		'redux-form': require('redux-form'),
+		validator: require('validator'),
+		'@ant-design/icons': require('@ant-design/icons'),
+		'react-event-listener': require('react-event-listener'),
 	},
 };

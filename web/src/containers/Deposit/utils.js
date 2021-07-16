@@ -7,7 +7,6 @@ import { EditWrapper, Button } from 'components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { required } from 'components/Form/validations';
 import { getNetworkLabelByKey } from 'utils/wallet';
-import { PLUGIN_URL } from 'config/constants';
 
 import Image from 'components/Image';
 import renderFields from 'components/Form/factoryFields';
@@ -99,7 +98,6 @@ const RenderContentForm = ({
 	formFields,
 	icons: ICONS,
 	selectedNetwork,
-	router,
 }) => {
 	const coinObject = coins[currency];
 	if (coinObject && !coinObject.meta.is_fiat) {
@@ -173,8 +171,6 @@ const RenderContentForm = ({
 				titleSection={titleSection}
 				icons={ICONS}
 				currency={currency}
-				router={router}
-				plugin_url={PLUGIN_URL}
 			/>
 		);
 	} else {

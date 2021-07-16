@@ -55,6 +55,7 @@ import {
 	setHelpdeskInfo,
 } from 'actions/appActions';
 import { hasTheme } from 'utils/theme';
+import { generateRCStrings } from 'utils/string';
 
 import { version, name } from '../package.json';
 import { API_URL, LANGUAGE_KEY } from './config/constants';
@@ -239,11 +240,15 @@ const bootstrapApp = (appConfig, injected_values, injected_html) => {
 	addElements(injected_values, 'head');
 	injectHTML(injected_html, 'head');
 	drawFavIcon(EXCHANGE_FAV_ICON);
-	initializeStrings();
 	// window.appConfig = { ...appConfig }
 	const {
-		app: { remoteRoutes },
+		app: { remoteRoutes, plugins },
 	} = store.getState();
+
+	const RCStrings = generateRCStrings(plugins);
+	const mergedStrings = merge({}, RCStrings, appConfig.strings);
+
+	initializeStrings(mergedStrings);
 
 	render(
 		<Provider store={store}>

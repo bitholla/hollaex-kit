@@ -11,7 +11,7 @@ export const ProjectConfig = React.createContext('appConfig');
 class ConfigProvider extends Component {
 	constructor(props) {
 		super(props);
-		const { initialConfig } = this.props;
+		const { initialConfig, plugins } = this.props;
 		const {
 			icons = {},
 			color = {},
@@ -30,7 +30,8 @@ class ConfigProvider extends Component {
 			icons: generateAllIcons(
 				calculatedThemes,
 				addDefaultLogo(defaultLogo, icons),
-				coin_icons
+				coin_icons,
+				plugins
 			),
 			color: calculatedThemes,
 			themeOptions,
@@ -156,8 +157,9 @@ class ConfigProvider extends Component {
 	}
 }
 
-const mapStateToProps = ({ app: { theme: activeTheme } }) => ({
+const mapStateToProps = ({ app: { theme: activeTheme, plugins } }) => ({
 	activeTheme,
+	plugins,
 });
 
 export default connect(mapStateToProps)(ConfigProvider);

@@ -54,8 +54,6 @@ import { EditWrapper } from 'components';
 import { verifyBankData } from 'actions/verificationActions';
 import { getErrorLocalized } from 'utils/errors';
 import { required, maxLength } from 'components/Form/validations';
-import { getToken } from 'utils/token';
-import { PLUGIN_URL } from 'config/constants';
 
 // const CONTENT_CLASS =
 // 	'd-flex justify-content-center align-items-center f-1 flex-column verification_content-wrapper';
@@ -215,7 +213,7 @@ class Verification extends Component {
 		if (activeTab === -1) {
 			return;
 		}
-		const { icons: ICONS, router } = this.props;
+		const { icons: ICONS } = this.props;
 		const {
 			email,
 			bank_account,
@@ -308,7 +306,6 @@ class Verification extends Component {
 						handleBack={this.handleBack}
 						setActivePageContent={this.setActivePageContent}
 						MAX_NUMBER_BANKS={MAX_NUMBER_BANKS}
-						router={router}
 					>
 						<BankVerificationHome
 							user={user}
@@ -462,12 +459,7 @@ class Verification extends Component {
 
 	renderPageContent = (tabProps) => {
 		const { activePage, activeTab, tabs, user, bankMeta } = this.state;
-		const {
-			activeLanguage,
-			icons: ICONS,
-			openContactForm,
-			router,
-		} = this.props;
+		const { activeLanguage, icons: ICONS, openContactForm } = this.props;
 		switch (activePage) {
 			case 'email':
 				return (
@@ -495,9 +487,6 @@ class Verification extends Component {
 						maxLength={maxLength}
 						required={required}
 						bankMeta={bankMeta}
-						router={router}
-						token={getToken()}
-						plugin_url={PLUGIN_URL}
 					>
 						<BankVerification
 							iconId="VERIFICATION_BANK_NEW"

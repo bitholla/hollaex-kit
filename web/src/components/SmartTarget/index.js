@@ -1,76 +1,34 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { RemoteComponent } from 'RemoteComponent';
-import { injectPlugin } from 'utils/plugin';
 import STRINGS from 'config/localizedStrings';
 import withConfig from 'components/ConfigProvider/withConfig';
+import { getToken } from 'utils/token';
+import { PLUGIN_URL } from 'config/constants';
+import { withRouter } from 'react-router';
+import { generateGlobalId } from 'utils/id';
 
-class SmartTarget extends Component {
-	componentDidMount() {
-		const { webViews, targets, id } = this.props;
-		if (targets.includes(id)) {
-			const components = [];
-			webViews[id].forEach(
-				({ src, props: propertiesData, all_props = false }) => {
-					let props = {};
-					if (all_props) {
-						props = { ...this.props };
-					} else {
-						propertiesData.forEach(({ key, store_key }) => {
-							props[key] = this.props[store_key];
-						});
-					}
+const SmartTarget = (props) => {
+	const { targets, id, children, webViews } = props;
 
-					const CustomComponent = (props) => (
-						<RemoteComponent url={src} {...props} />
-					);
-
-					components.push(<CustomComponent strings={STRINGS} {...props} />);
-				}
-			);
-
-			injectPlugin(components, id);
-		}
-	}
-
-	componentDidUpdate(prevProps) {
-		const { webViews, targets, id } = this.props;
-
-		if (!prevProps.targets.includes(id) && targets.includes(id)) {
-			const components = [];
-			webViews[id].forEach(
-				({ src, props: propertiesData, all_props = false }) => {
-					let props = {};
-					if (all_props) {
-						props = { ...this.props };
-					} else {
-						propertiesData.forEach(({ key, store_key }) => {
-							props[key] = this.props[store_key];
-						});
-					}
-
-					const CustomComponent = (props) => (
-						<RemoteComponent url={src} {...props} />
-					);
-
-					components.push(<CustomComponent strings={STRINGS} {...props} />);
-				}
-			);
-
-			injectPlugin(components, id);
-		}
-	}
-
-	render() {
-		const { targets, id, children } = this.props;
-
-		return targets.includes(id) ? (
-			<div id={id} />
-		) : (
-			<Fragment>{children}</Fragment>
-		);
-	}
-}
+	return targets.includes(id) ? (
+		<Fragment>
+			{webViews[id].map(({ src, name }, index) => (
+				<RemoteComponent
+					key={`${name}_${index}`}
+					url={src}
+					generateId={generateGlobalId(name)}
+					strings={STRINGS}
+					plugin_url={PLUGIN_URL}
+					token={getToken()}
+					{...props}
+				/>
+			))}
+		</Fragment>
+	) : (
+		<Fragment>{children}</Fragment>
+	);
+};
 
 const mapStateToProps = (store) => ({
 	targets: store.app.targets,
@@ -98,4 +56,4 @@ const mapStateToProps = (store) => ({
 	pairsTradesFetched: store.orderbook.pairsTradesFetched,
 });
 
-export default connect(mapStateToProps)(withConfig(SmartTarget));
+export default connect(mapStateToProps)(withConfig(withRouter(SmartTarget)));

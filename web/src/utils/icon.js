@@ -1,5 +1,6 @@
 import defaultIcons from 'config/icons';
 import merge from 'lodash.merge';
+import { generateGlobalId } from 'utils/id';
 
 const defaultIconsKey = 'dark';
 
@@ -27,16 +28,50 @@ const generateServerSideDefaultIcons = (coins) => {
 	return icons;
 };
 
-export const generateAllIcons = (themes, icons, coin_icons = {}) => {
+const generateRCIcons = (themes, plugins = []) => {
+	const themeKeys = Object.keys(themes);
+	const allIcons = {};
+
+	themeKeys.forEach((key) => {
+		allIcons[key] = {};
+	});
+
+	plugins.forEach(({ name, web_view = [] }) => {
+		if (web_view) {
+			web_view.forEach(({ meta: { icons = {} } = { icons: {} } }) => {
+				Object.entries(icons).forEach(([themeKey, themeSpecificIcons]) => {
+					if (themeKeys.includes(themeKey)) {
+						Object.entries(themeSpecificIcons).forEach(([key, icon]) => {
+							allIcons[themeKey][generateGlobalId(name)(key)] = icon;
+						});
+					}
+				});
+			});
+		}
+	});
+
+	return allIcons;
+};
+
+export const generateAllIcons = (
+	themes,
+	icons,
+	coin_icons = {},
+	plugins = []
+) => {
 	const coinKeys = Object.keys(coin_icons);
 	const themeKeys = Object.keys(themes);
 
 	// server-side coin icons
 	const serverSideDefaultCoinIcons = generateServerSideDefaultIcons(coin_icons);
 
+	// remote components icons
+	const RCIcons = generateRCIcons(themes, plugins);
+
 	// missing keys and values are set from the default Icons Object
 	const defaultIconsObject = merge(
 		{},
+		RCIcons[defaultIconsKey],
 		icons[defaultIconsKey],
 		serverSideDefaultCoinIcons
 	);
@@ -45,7 +80,13 @@ export const generateAllIcons = (themes, icons, coin_icons = {}) => {
 
 	themeKeys.forEach((theme) => {
 		const themeSpecificIconsObject = icons[theme] || {};
-		allIcons[theme] = merge({}, defaultIconsObject, themeSpecificIconsObject);
+		const themeSpecificRCIcons = RCIcons[theme] || {};
+		allIcons[theme] = merge(
+			{},
+			defaultIconsObject,
+			themeSpecificRCIcons,
+			themeSpecificIconsObject
+		);
 
 		// default coin icon set for coins without icon
 		const defaultCoinIcon = allIcons[theme]['DEFAULT_ICON'];

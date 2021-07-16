@@ -409,9 +409,13 @@ const reducer = (state = INITIAL_STATE, { type, payload = {} }) => {
 		}
 		case SET_WEB_VIEWS: {
 			const allWebViews = [];
-			payload.enabledPlugins.forEach(({ web_view = [] }) => {
+			payload.enabledPlugins.forEach(({ name, web_view = [] }) => {
 				if (web_view && web_view.length) {
-					allWebViews.push(...web_view);
+					const named_web_views = web_view.map((viewObj) => ({
+						...viewObj,
+						name,
+					}));
+					allWebViews.push(...named_web_views);
 				}
 			});
 
